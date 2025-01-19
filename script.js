@@ -28,9 +28,8 @@ let board = createBoard();
 let currentPiece = randomPiece();
 let nextPiece = randomPiece();
 let lastPieceType = null;
-let dropInterval = 1000;
-let lastTime = 0;
 let score = 0;
+let dropInterval = 1000; // 1秒ごとにブロックが落ちる
 
 function createBoard() {
     return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
@@ -154,22 +153,20 @@ function randomPiece() {
     return { shape: SHAPES[typeId], x: 4, y: 0, type: typeId };
 }
 
-function update(time = 0) {
-    const deltaTime = time - lastTime;
-    lastTime = time;
-
-    if (deltaTime > dropInterval) {
-        dropPiece();
-    }
-
+function update() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawBoard();
     drawPiece(currentPiece);
     drawNextPiece();
-
-    requestAnimationFrame(update);
 }
 
+// ゲームループ
+setInterval(() => {
+    dropPiece();  // 定期的にブロックを落下させる
+    update();     // 描画更新
+}, dropInterval);
+
+// キーイベントリスナー
 document.addEventListener("keydown", event => {
     if (event.key === "ArrowLeft") movePiece(-1);
     if (event.key === "ArrowRight") movePiece(1);
@@ -182,5 +179,3 @@ document.getElementById("left").addEventListener("click", () => movePiece(-1));
 document.getElementById("right").addEventListener("click", () => movePiece(1));
 document.getElementById("down").addEventListener("click", dropPiece);
 document.getElementById("rotate").addEventListener("click", rotatePiece);
-
-update();
