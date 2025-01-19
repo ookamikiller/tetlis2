@@ -7,11 +7,25 @@ body {
     padding: 0;
 }
 
+h1 {
+    margin-top: 10px;
+}
+
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+
 canvas {
     background-color: #111;
     border: 2px solid #fff;
-    display: block;
-    margin: 10px auto;
+}
+
+#next-block {
+    text-align: center;
+    font-size: 18px;
 }
 
 #score {

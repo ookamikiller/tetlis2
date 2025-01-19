@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>シンプルテトリス</title>
+    <title>テトリス</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>テトリス</h1>
-    <canvas id="gameCanvas" width="300" height="600"></canvas>
+    <div id="container">
+        <canvas id="gameCanvas" width="300" height="600"></canvas>
+        <div id="next-block">
+            <h2>次のブロック</h2>
+            <canvas id="nextCanvas" width="120" height="120"></canvas>
+        </div>
+    </div>
     <div id="score">スコア: 0</div>
     <div id="controls">
         <button id="left">←</button>
