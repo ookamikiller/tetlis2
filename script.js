@@ -28,7 +28,6 @@ let board = createBoard();
 let currentPiece = randomPiece();
 let nextPiece = randomPiece();
 let lastPieceType = null;
-let dropCounter = 0;
 let dropInterval = 1000;
 let lastTime = 0;
 let score = 0;
@@ -89,7 +88,7 @@ function clearLines() {
     }
     score += cleared;
     document.getElementById("score").innerText = `スコア: ${score}`;
-    dropInterval = 1000 - Math.min(Math.floor(score / 5) * 100, 700); // スピードアップ
+    dropInterval = Math.max(200, 1000 - Math.floor(score / 5) * 100); // スピードアップ
 }
 
 function collide() {
@@ -148,7 +147,6 @@ function dropPiece() {
             document.getElementById("score").innerText = `スコア: ${score}`;
         }
     }
-    dropCounter = 0;
 }
 
 function randomPiece() {
@@ -159,9 +157,10 @@ function randomPiece() {
 function update(time = 0) {
     const deltaTime = time - lastTime;
     lastTime = time;
-    dropCounter += deltaTime;
 
-    if (dropCounter > dropInterval) dropPiece();
+    if (deltaTime > dropInterval) {
+        dropPiece();
+    }
 
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawBoard();
