@@ -102,22 +102,16 @@ function collide() {
 }
 
 function rotatePiece() {
-    const shape = currentPiece.shape.map((row, i) =>
+    const newShape = currentPiece.shape.map((row, i) =>
         row.map((_, j) => currentPiece.shape[currentPiece.shape.length - j - 1][i])
     );
 
-    const x = currentPiece.x;
-    currentPiece.shape = shape;
+    const originalShape = currentPiece.shape;
+    currentPiece.shape = newShape;
 
-    // 壁と衝突した場合は補正
-    while (collide()) {
-        currentPiece.x += currentPiece.x > COLS / 2 ? -1 : 1;
-        if (collide()) {
-            currentPiece.shape = shape.map((row, i) =>
-                row.map((_, j) => currentPiece.shape[j][row.length - 1 - i])
-            ); // 回転を元に戻す
-            break;
-        }
+    // 回転後の衝突チェック
+    if (collide()) {
+        currentPiece.shape = originalShape; // 衝突したら元に戻す
     }
 }
 
@@ -160,11 +154,21 @@ function update() {
     drawNextPiece();
 }
 
-// ゲームループ
-setInterval(() => {
-    dropPiece();  // 定期的にブロックを落下させる
-    update();     // 描画更新
-}, dropInterval);
+// ゲームループの開始
+let lastTime = 0;
+function gameLoop(timestamp) {
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
+
+    if (deltaTime > dropInterval) {
+        dropPiece();
+    }
+    update();
+
+    requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
 
 // キーイベントリスナー
 document.addEventListener("keydown", event => {
