@@ -60,9 +60,6 @@ function drawPiece(piece, ctx = context) {
 
 function drawNextPiece() {
     nextContext.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
-    nextPiece.shape
-function drawNextPiece() {
-    nextContext.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
     nextPiece.shape.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value) drawBlock(x, y, COLORS[value], nextContext);
@@ -92,7 +89,7 @@ function clearLines() {
     }
     score += cleared;
     document.getElementById("score").innerText = `スコア: ${score}`;
-    dropInterval = 1000 - Math.floor(score / 5) * 100; // スピードアップ
+    dropInterval = 1000 - Math.min(Math.floor(score / 5) * 100, 700); // スピードアップ
 }
 
 function collide() {
